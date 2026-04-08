@@ -1,4 +1,4 @@
-plugins { id("clkx-plugin") }
+plugins { id("clkx-conventions") }
 
 dependencies { implementation(project(":exec")) }
 
