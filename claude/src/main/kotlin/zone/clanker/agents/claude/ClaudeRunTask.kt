@@ -37,6 +37,11 @@ open class ClaudeRunTask : DefaultTask() {
             addFlag("--system-prompt", extension.systemPrompt)
             extension.allowedTools.forEach { addFlag("--allowedTools", it) }
             extension.disallowedTools.forEach { addFlag("--disallowedTools", it) }
+            if (extension.bare) add("--bare")
+            if (extension.dangerouslySkipPermissions) add("--dangerously-skip-permissions")
+            if (extension.verbose) add("--verbose")
+            extension.addDir.forEach { addFlag("--add-dir", it) }
+            addFlag("--append-system-prompt", extension.appendSystemPrompt)
             addAll(extension.extraArgs)
         }
 

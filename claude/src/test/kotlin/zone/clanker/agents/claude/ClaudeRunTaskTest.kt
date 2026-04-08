@@ -37,6 +37,13 @@ class ClaudeRunTaskTest : BehaviorSpec({
             then("it does not include empty system prompt") {
                 args shouldNotContain "--system-prompt"
             }
+            then("it does not include bypass flags") {
+                args shouldNotContain "--bare"
+                args shouldNotContain "--dangerously-skip-permissions"
+                args shouldNotContain "--verbose"
+                args shouldNotContain "--add-dir"
+                args shouldNotContain "--append-system-prompt"
+            }
         }
 
         `when`("called with model set") {
@@ -99,6 +106,50 @@ class ClaudeRunTaskTest : BehaviorSpec({
             then("it includes disallowed tools") {
                 args shouldContain "--disallowedTools"
                 args shouldContain "Bash"
+            }
+        }
+
+        `when`("called with bare") {
+            ext.bare = true
+            val args = task.buildArgs("Test")
+            then("it includes bare flag") {
+                args shouldContain "--bare"
+            }
+        }
+
+        `when`("called with dangerouslySkipPermissions") {
+            ext.dangerouslySkipPermissions = true
+            val args = task.buildArgs("Test")
+            then("it includes dangerously-skip-permissions flag") {
+                args shouldContain "--dangerously-skip-permissions"
+            }
+        }
+
+        `when`("called with verbose") {
+            ext.verbose = true
+            val args = task.buildArgs("Test")
+            then("it includes verbose flag") {
+                args shouldContain "--verbose"
+            }
+        }
+
+        `when`("called with addDir") {
+            ext.addDir = listOf("/tmp/dir1", "/tmp/dir2")
+            val args = task.buildArgs("Test")
+            then("it includes add-dir flags") {
+                args shouldContain "--add-dir"
+                args shouldContain "/tmp/dir1"
+                args shouldContain "/tmp/dir2"
+            }
+        }
+
+        `when`("called with appendSystemPrompt") {
+            ext.appendSystemPrompt = "Be concise"
+            val args = task.buildArgs("Test")
+            then("it includes append-system-prompt") {
+                args.shouldContainInOrder(
+                    listOf("--append-system-prompt", "Be concise"),
+                )
             }
         }
 

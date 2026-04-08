@@ -30,6 +30,10 @@ data object Copilot {
         var agent: String = ""
         var addDir: List<String> = emptyList()
         var configDir: String = ""
+        var yolo: Boolean = false
+        var allowAllUrls: Boolean = false
+        var noAskUser: Boolean = false
+        var noCustomInstructions: Boolean = false
         var extraArgs: List<String> = emptyList()
     }
 

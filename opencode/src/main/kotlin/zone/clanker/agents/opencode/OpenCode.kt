@@ -36,6 +36,9 @@ data object OpenCode {
         var file: List<String> = emptyList()
         var dir: String = ""
         var share: Boolean = false
+        var pure: Boolean = false
+        var title: String = ""
+        var continueSession: Boolean = false
         var extraArgs: List<String> = emptyList()
     }
 

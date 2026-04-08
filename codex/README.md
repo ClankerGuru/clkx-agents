@@ -150,6 +150,7 @@ codex {
 | `json` | `Boolean` | `false` | Enable JSON output |
 | `ephemeral` | `Boolean` | `false` | Ephemeral session (no history) |
 | `image` | `List<String>` | `[]` | Image file paths to include |
+| `dangerouslyBypass` | `Boolean` | `false` | Bypass all approvals and sandbox restrictions |
 | `extraArgs` | `List<String>` | `[]` | Additional CLI arguments |
 
 ## `codex-exec` Options

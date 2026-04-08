@@ -46,6 +46,7 @@ class CodexPluginTest : BehaviorSpec({
                 ext.json shouldBe false
                 ext.ephemeral shouldBe false
                 ext.image shouldBe emptyList()
+                ext.dangerouslyBypass shouldBe false
                 ext.extraArgs shouldBe emptyList()
             }
         }
@@ -90,6 +91,10 @@ class CodexPluginTest : BehaviorSpec({
             then("image is mutable") {
                 ext.image = listOf("image.png")
                 ext.image shouldBe listOf("image.png")
+            }
+            then("dangerouslyBypass is mutable") {
+                ext.dangerouslyBypass = true
+                ext.dangerouslyBypass shouldBe true
             }
             then("extraArgs is mutable") {
                 ext.extraArgs = listOf("--verbose")

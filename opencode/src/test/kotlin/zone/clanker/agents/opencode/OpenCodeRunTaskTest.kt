@@ -34,6 +34,9 @@ class OpenCodeRunTaskTest : BehaviorSpec({
             then("it does not include boolean flags") {
                 args shouldNotContain "--thinking"
                 args shouldNotContain "--share"
+                args shouldNotContain "--pure"
+                args shouldNotContain "--title"
+                args shouldNotContain "--continue"
             }
         }
 
@@ -109,6 +112,32 @@ class OpenCodeRunTaskTest : BehaviorSpec({
             val args = task.buildArgs("Test")
             then("it includes share flag") {
                 args shouldContain "--share"
+            }
+        }
+
+        `when`("called with pure") {
+            ext.pure = true
+            val args = task.buildArgs("Test")
+            then("it includes pure flag") {
+                args shouldContain "--pure"
+            }
+        }
+
+        `when`("called with title") {
+            ext.title = "My Session"
+            val args = task.buildArgs("Test")
+            then("it includes title") {
+                args.shouldContainInOrder(
+                    listOf("--title", "My Session"),
+                )
+            }
+        }
+
+        `when`("called with continueSession") {
+            ext.continueSession = true
+            val args = task.buildArgs("Test")
+            then("it includes continue flag") {
+                args shouldContain "--continue"
             }
         }
 

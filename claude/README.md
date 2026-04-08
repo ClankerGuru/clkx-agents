@@ -140,6 +140,11 @@ claude {
 | `allowedTools` | `List<String>` | `[]` | Tools to allow |
 | `disallowedTools` | `List<String>` | `[]` | Tools to disallow |
 | `effort` | `String` | `""` | Effort level (`"low"`, `"medium"`, `"high"`) |
+| `bare` | `Boolean` | `false` | Run without loading CLAUDE.md files |
+| `dangerouslySkipPermissions` | `Boolean` | `false` | Skip all permission checks |
+| `verbose` | `Boolean` | `false` | Enable verbose output |
+| `addDir` | `List<String>` | `[]` | Additional directories to include |
+| `appendSystemPrompt` | `String` | `""` | Text to append to the system prompt |
 | `extraArgs` | `List<String>` | `[]` | Additional CLI arguments |
 
 ## `claude-run` Options

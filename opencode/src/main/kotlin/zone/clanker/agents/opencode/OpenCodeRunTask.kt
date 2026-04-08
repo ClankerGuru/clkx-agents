@@ -36,6 +36,9 @@ open class OpenCodeRunTask : DefaultTask() {
             extension.file.forEach { addFlag("--file", it) }
             addFlag("--dir", extension.dir)
             if (extension.share) add("--share")
+            if (extension.pure) add("--pure")
+            addFlag("--title", extension.title)
+            if (extension.continueSession) add("--continue")
             addAll(extension.extraArgs)
         }
 

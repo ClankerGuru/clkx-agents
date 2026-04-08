@@ -49,6 +49,9 @@ class OpenCodePluginTest : BehaviorSpec({
                 ext.file shouldBe emptyList()
                 ext.dir shouldBe ""
                 ext.share shouldBe false
+                ext.pure shouldBe false
+                ext.title shouldBe ""
+                ext.continueSession shouldBe false
                 ext.extraArgs shouldBe emptyList()
             }
         }
@@ -85,6 +88,18 @@ class OpenCodePluginTest : BehaviorSpec({
             then("share is mutable") {
                 ext.share = true
                 ext.share shouldBe true
+            }
+            then("pure is mutable") {
+                ext.pure = true
+                ext.pure shouldBe true
+            }
+            then("title is mutable") {
+                ext.title = "My Session"
+                ext.title shouldBe "My Session"
+            }
+            then("continueSession is mutable") {
+                ext.continueSession = true
+                ext.continueSession shouldBe true
             }
             then("extraArgs is mutable") {
                 ext.extraArgs = listOf("--verbose")

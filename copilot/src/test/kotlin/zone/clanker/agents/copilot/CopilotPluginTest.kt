@@ -43,6 +43,10 @@ class CopilotPluginTest : BehaviorSpec({
                 ext.agent shouldBe ""
                 ext.addDir shouldBe emptyList()
                 ext.configDir shouldBe ""
+                ext.yolo shouldBe false
+                ext.allowAllUrls shouldBe false
+                ext.noAskUser shouldBe false
+                ext.noCustomInstructions shouldBe false
                 ext.extraArgs shouldBe emptyList()
             }
         }
@@ -91,6 +95,22 @@ class CopilotPluginTest : BehaviorSpec({
             then("configDir is mutable") {
                 ext.configDir = "/tmp/config"
                 ext.configDir shouldBe "/tmp/config"
+            }
+            then("yolo is mutable") {
+                ext.yolo = true
+                ext.yolo shouldBe true
+            }
+            then("allowAllUrls is mutable") {
+                ext.allowAllUrls = true
+                ext.allowAllUrls shouldBe true
+            }
+            then("noAskUser is mutable") {
+                ext.noAskUser = true
+                ext.noAskUser shouldBe true
+            }
+            then("noCustomInstructions is mutable") {
+                ext.noCustomInstructions = true
+                ext.noCustomInstructions shouldBe true
             }
             then("extraArgs is mutable") {
                 ext.extraArgs = listOf("--verbose")

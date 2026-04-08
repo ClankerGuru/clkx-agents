@@ -37,6 +37,7 @@ open class CodexExecTask : DefaultTask() {
             if (extension.json) add("--json")
             if (extension.ephemeral) add("--ephemeral")
             extension.image.forEach { addFlag("--image", it) }
+            if (extension.dangerouslyBypass) add("--dangerously-bypass-approvals-and-sandbox")
             addAll(extension.extraArgs)
         }
 

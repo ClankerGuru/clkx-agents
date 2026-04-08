@@ -31,6 +31,11 @@ data object Claude {
         var allowedTools: List<String> = emptyList()
         var disallowedTools: List<String> = emptyList()
         var effort: String = ""
+        var bare: Boolean = false
+        var dangerouslySkipPermissions: Boolean = false
+        var verbose: Boolean = false
+        var addDir: List<String> = emptyList()
+        var appendSystemPrompt: String = ""
         var extraArgs: List<String> = emptyList()
     }
 

@@ -35,6 +35,10 @@ class CopilotRunTaskTest : BehaviorSpec({
                 args shouldNotContain "--allow-all-paths"
                 args shouldNotContain "--autopilot"
                 args shouldNotContain "--silent"
+                args shouldNotContain "--yolo"
+                args shouldNotContain "--allow-all-urls"
+                args shouldNotContain "--no-ask-user"
+                args shouldNotContain "--no-custom-instructions"
             }
         }
 
@@ -107,6 +111,57 @@ class CopilotRunTaskTest : BehaviorSpec({
                 args.shouldContainInOrder(
                     listOf("--config-dir", "/tmp/config"),
                 )
+            }
+        }
+
+        `when`("called with yolo") {
+            ext.yolo = true
+            val args = task.buildArgs("Test")
+            then("it includes yolo flag") {
+                args shouldContain "--yolo"
+            }
+        }
+
+        `when`("called with yolo overrides allowAll") {
+            val yoloExt =
+                Copilot.SettingsExtension().apply {
+                    yolo = true
+                    allowAll = true
+                }
+            val yoloTask =
+                project.tasks.create(
+                    "test-yolo",
+                    CopilotRunTask::class.java,
+                )
+            yoloTask.extension = yoloExt
+            val args = yoloTask.buildArgs("Test")
+            then("it includes yolo but not allow-all") {
+                args shouldContain "--yolo"
+                args shouldNotContain "--allow-all"
+            }
+        }
+
+        `when`("called with allowAllUrls") {
+            ext.allowAllUrls = true
+            val args = task.buildArgs("Test")
+            then("it includes allow-all-urls flag") {
+                args shouldContain "--allow-all-urls"
+            }
+        }
+
+        `when`("called with noAskUser") {
+            ext.noAskUser = true
+            val args = task.buildArgs("Test")
+            then("it includes no-ask-user flag") {
+                args shouldContain "--no-ask-user"
+            }
+        }
+
+        `when`("called with noCustomInstructions") {
+            ext.noCustomInstructions = true
+            val args = task.buildArgs("Test")
+            then("it includes no-custom-instructions flag") {
+                args shouldContain "--no-custom-instructions"
             }
         }
 

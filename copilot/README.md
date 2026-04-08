@@ -122,6 +122,10 @@ copilot {
 | `agent` | `String` | `""` | Agent to use |
 | `addDir` | `List<String>` | `[]` | Additional directories to include |
 | `configDir` | `String` | `""` | Custom config directory |
+| `yolo` | `Boolean` | `false` | Allow all permissions (alias for `--yolo`, overrides `allowAll`) |
+| `allowAllUrls` | `Boolean` | `false` | Allow all URL fetches |
+| `noAskUser` | `Boolean` | `false` | Disable ask-user tool |
+| `noCustomInstructions` | `Boolean` | `false` | Ignore custom instructions files |
 | `extraArgs` | `List<String>` | `[]` | Additional CLI arguments |
 
 ## `copilot-run` Options

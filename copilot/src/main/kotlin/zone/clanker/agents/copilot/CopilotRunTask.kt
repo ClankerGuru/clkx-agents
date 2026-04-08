@@ -39,11 +39,18 @@ open class CopilotRunTask : DefaultTask() {
         }
 
     private fun MutableList<String>.addBooleanFlags() {
-        if (extension.allowAll) add("--allow-all")
+        if (extension.yolo) {
+            add("--yolo")
+        } else if (extension.allowAll) {
+            add("--allow-all")
+        }
         if (extension.allowAllTools) add("--allow-all-tools")
         if (extension.allowAllPaths) add("--allow-all-paths")
+        if (extension.allowAllUrls) add("--allow-all-urls")
         if (extension.autopilot) add("--autopilot")
         if (extension.silent) add("--silent")
+        if (extension.noAskUser) add("--no-ask-user")
+        if (extension.noCustomInstructions) add("--no-custom-instructions")
     }
 
     private fun MutableList<String>.addFlag(

@@ -34,6 +34,7 @@ class CodexExecTaskTest : BehaviorSpec({
                 args shouldNotContain "--search"
                 args shouldNotContain "--json"
                 args shouldNotContain "--ephemeral"
+                args shouldNotContain "--dangerously-bypass-approvals-and-sandbox"
             }
         }
 
@@ -122,6 +123,14 @@ class CodexExecTaskTest : BehaviorSpec({
             then("it includes image") {
                 args shouldContain "--image"
                 args shouldContain "img.png"
+            }
+        }
+
+        `when`("called with dangerouslyBypass") {
+            ext.dangerouslyBypass = true
+            val args = task.buildArgs("Test")
+            then("it includes dangerously-bypass flag") {
+                args shouldContain "--dangerously-bypass-approvals-and-sandbox"
             }
         }
 

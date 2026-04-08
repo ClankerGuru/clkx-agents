@@ -44,6 +44,11 @@ class ClaudePluginTest : BehaviorSpec({
                 ext.allowedTools shouldBe emptyList()
                 ext.disallowedTools shouldBe emptyList()
                 ext.effort shouldBe ""
+                ext.bare shouldBe false
+                ext.dangerouslySkipPermissions shouldBe false
+                ext.verbose shouldBe false
+                ext.addDir shouldBe emptyList()
+                ext.appendSystemPrompt shouldBe ""
                 ext.extraArgs shouldBe emptyList()
             }
         }
@@ -80,6 +85,26 @@ class ClaudePluginTest : BehaviorSpec({
             then("effort is mutable") {
                 ext.effort = "high"
                 ext.effort shouldBe "high"
+            }
+            then("bare is mutable") {
+                ext.bare = true
+                ext.bare shouldBe true
+            }
+            then("dangerouslySkipPermissions is mutable") {
+                ext.dangerouslySkipPermissions = true
+                ext.dangerouslySkipPermissions shouldBe true
+            }
+            then("verbose is mutable") {
+                ext.verbose = true
+                ext.verbose shouldBe true
+            }
+            then("addDir is mutable") {
+                ext.addDir = listOf("/tmp/dir1", "/tmp/dir2")
+                ext.addDir shouldBe listOf("/tmp/dir1", "/tmp/dir2")
+            }
+            then("appendSystemPrompt is mutable") {
+                ext.appendSystemPrompt = "Be concise"
+                ext.appendSystemPrompt shouldBe "Be concise"
             }
             then("extraArgs is mutable") {
                 ext.extraArgs = listOf("--verbose")

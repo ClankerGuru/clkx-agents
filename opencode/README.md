@@ -182,6 +182,9 @@ opencode {
 | `file` | `List<String>` | `[]` | Files to include as context |
 | `dir` | `String` | `""` | Working directory override |
 | `share` | `Boolean` | `false` | Share the session |
+| `pure` | `Boolean` | `false` | Run in pure mode (no config files) |
+| `title` | `String` | `""` | Session title |
+| `continueSession` | `Boolean` | `false` | Continue the last session |
 | `extraArgs` | `List<String>` | `[]` | Additional CLI arguments |
 
 ## `opencode-run` Options

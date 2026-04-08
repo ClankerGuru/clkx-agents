@@ -33,6 +33,7 @@ data object Codex {
         var json: Boolean = false
         var ephemeral: Boolean = false
         var image: List<String> = emptyList()
+        var dangerouslyBypass: Boolean = false
         var extraArgs: List<String> = emptyList()
     }
 
