@@ -6,7 +6,7 @@ gradlePlugin {
     plugins {
         register("claude") {
             id = "zone.clanker.claude"
-            implementationClass = "zone.clanker.agents.claude.ClaudePlugin"
+            implementationClass = "zone.clanker.agents.claude.Claude\$SettingsPlugin"
             displayName = "Claude Code Plugin"
             description = "Gradle tasks for Claude Code CLI"
         }

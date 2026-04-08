@@ -9,7 +9,7 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class ClaudeRunTask : DefaultTask() {
     @Internal
-    lateinit var extension: ClaudeExtension
+    lateinit var extension: Claude.SettingsExtension
 
     @TaskAction
     fun run() {

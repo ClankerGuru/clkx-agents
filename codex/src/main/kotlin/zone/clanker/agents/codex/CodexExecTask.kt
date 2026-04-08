@@ -9,7 +9,7 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class CodexExecTask : DefaultTask() {
     @Internal
-    lateinit var extension: CodexExtension
+    lateinit var extension: Codex.SettingsExtension
 
     @TaskAction
     fun run() {

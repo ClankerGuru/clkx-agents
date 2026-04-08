@@ -2,12 +2,23 @@ plugins {
     kotlin("jvm")
     id("io.gitlab.arturbosch.detekt")
     id("org.jlleitschuh.gradle.ktlint")
+    id("org.jetbrains.kotlinx.kover")
 }
 
 kotlin { jvmToolchain(17) }
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+}
+
+kover {
+    reports {
+        verify {
+            rule {
+                minBound(30)
+            }
+        }
+    }
 }
 
 dependencies {

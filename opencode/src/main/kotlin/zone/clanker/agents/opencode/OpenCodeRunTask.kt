@@ -9,7 +9,7 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeRunTask : DefaultTask() {
     @Internal
-    lateinit var extension: OpenCodeExtension
+    lateinit var extension: OpenCode.SettingsExtension
 
     @TaskAction
     fun run() {

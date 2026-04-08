@@ -9,7 +9,7 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class CopilotResumeTask : DefaultTask() {
     @Internal
-    lateinit var extension: CopilotExtension
+    lateinit var extension: Copilot.SettingsExtension
 
     @TaskAction
     fun run() {

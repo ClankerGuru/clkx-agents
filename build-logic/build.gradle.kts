@@ -7,4 +7,5 @@ dependencies {
     implementation("com.vanniktech:gradle-maven-publish-plugin:0.32.0")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8")
     implementation("org.jlleitschuh.gradle:ktlint-gradle:12.2.0")
+    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.9.1")
 }
