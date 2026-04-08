@@ -7,6 +7,10 @@ Gradle settings plugin wrapping the [Claude Code](https://docs.anthropic.com/en/
 ## Install the CLI
 
 ```bash
+# bun (recommended)
+bun install -g @anthropic-ai/claude-code
+
+# npm
 npm install -g @anthropic-ai/claude-code
 ```
 

@@ -7,10 +7,13 @@ Gradle settings plugin wrapping the [OpenAI Codex](https://github.com/openai/cod
 ## Install the CLI
 
 ```bash
-# macOS
+# macOS (Homebrew)
 brew install --cask codex
 
-# Or via npm
+# bun
+bun install -g @openai/codex
+
+# npm
 npm install -g @openai/codex
 ```
 

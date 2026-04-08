@@ -7,14 +7,17 @@ Gradle settings plugin wrapping the [Copilot CLI](https://github.com/github/copi
 ## Install the CLI
 
 ```bash
-# macOS (preferred)
+# macOS (Homebrew)
 brew install --cask copilot-cli
 
-# Or download from GitHub releases
-# https://github.com/github/copilot-cli/releases
+# npm
+npm install -g @github/copilot
+
+# bun
+bun install -g @github/copilot
 ```
 
-Copilot CLI is a standalone desktop application. It is **not** an npm package and **not** a `gh` extension. The binary is `copilot`. Authenticate with:
+The binary is `copilot`. Authenticate with:
 
 ```bash
 copilot login

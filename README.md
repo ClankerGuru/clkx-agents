@@ -20,16 +20,16 @@ Gradle settings plugins for AI coding agents -- Claude Code, GitHub Copilot, Ope
 
 ```bash
 # Claude Code
-npm install -g @anthropic-ai/claude-code
+bun install -g @anthropic-ai/claude-code
 
-# GitHub Copilot (standalone CLI -- not npm, not a gh extension)
-brew install --cask copilot-cli
+# GitHub Copilot
+brew install --cask copilot-cli      # or: bun install -g @github/copilot
 
 # OpenAI Codex
-brew install --cask codex          # or: npm install -g @openai/codex
+brew install --cask codex            # or: bun install -g @openai/codex
 
 # OpenCode
-bun install -g opencode-ai        # or: npm install -g opencode-ai
+brew install opencode                # or: bun install -g opencode-ai
 ```
 
 ## Quick Start

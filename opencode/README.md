@@ -7,10 +7,13 @@ Gradle settings plugin wrapping the [OpenCode](https://github.com/opencode-ai/op
 ## Install the CLI
 
 ```bash
-# Via bun (preferred)
+# macOS (Homebrew)
+brew install opencode
+
+# bun
 bun install -g opencode-ai
 
-# Or via npm
+# npm
 npm install -g opencode-ai
 ```
 
