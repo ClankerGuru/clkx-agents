@@ -7,17 +7,18 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class CodexForkTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val args =
             buildList {
                 add("fork")
                 if (project.findProperty("last")?.toString()?.toBoolean() == true) add("--last")
             }
+        return "codex" to args
+    }
 
-        val result = Cli.exec("codex", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("codex fork exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "codex fork")
     }
 }

@@ -7,15 +7,16 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeSessionDeleteTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val sessionId =
             project.findProperty("sessionId")?.toString()
                 ?: error("Required property 'sessionId' not set. Use -PsessionId=\"...\"")
+        return "opencode" to listOf("session", "delete", sessionId)
+    }
 
-        val result = Cli.exec("opencode", listOf("session", "delete", sessionId), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("opencode session delete exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "opencode session delete")
     }
 }

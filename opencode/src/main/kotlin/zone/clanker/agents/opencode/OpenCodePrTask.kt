@@ -7,15 +7,16 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodePrTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val number =
             project.findProperty("number")?.toString()
                 ?: error("Required property 'number' not set. Use -Pnumber=\"...\"")
+        return "opencode" to listOf("pr", number)
+    }
 
-        val result = Cli.exec("opencode", listOf("pr", number), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("opencode pr exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "opencode pr")
     }
 }

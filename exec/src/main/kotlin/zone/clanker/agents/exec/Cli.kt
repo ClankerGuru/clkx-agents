@@ -60,5 +60,18 @@ object Cli {
         workDir: File? = null,
     ): CliResult = exec(CliRequest(binary = binary, args = args, workDir = workDir))
 
+    fun execAndPrint(
+        binary: String,
+        args: List<String> = emptyList(),
+        workDir: File? = null,
+        label: String = "$binary ${args.firstOrNull() ?: ""}".trim(),
+    ): CliResult {
+        val result = exec(binary, args, workDir)
+        print(result.stdout)
+        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
+        if (!result.success) error("$label exited with code ${result.exitCode}")
+        return result
+    }
+
     fun which(binary: String): Boolean = exec(binary = "which", args = listOf(binary)).success
 }

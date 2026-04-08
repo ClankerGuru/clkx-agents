@@ -7,10 +7,11 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class ClaudeVersionTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> = "claude" to listOf("--version")
+
     @TaskAction
     fun run() {
-        val result = Cli.exec("claude", listOf("--version"))
-        print(result.stdout)
-        if (!result.success) error("claude --version exited with code ${result.exitCode}")
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, label = "claude --version")
     }
 }

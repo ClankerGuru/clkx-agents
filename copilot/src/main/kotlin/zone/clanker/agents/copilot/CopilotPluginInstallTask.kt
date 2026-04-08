@@ -7,15 +7,16 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class CopilotPluginInstallTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val source =
             project.findProperty("source")?.toString()
                 ?: error("Required property 'source' not set. Use -Psource=\"...\"")
+        return "copilot" to listOf("plugin", "install", source)
+    }
 
-        val result = Cli.exec("copilot", listOf("plugin", "install", source), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("copilot plugin install exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "copilot plugin install")
     }
 }

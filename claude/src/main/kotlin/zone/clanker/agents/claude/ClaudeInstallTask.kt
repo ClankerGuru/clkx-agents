@@ -7,18 +7,19 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class ClaudeInstallTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val args =
             buildList {
                 add("install")
                 val target = project.findProperty("target")?.toString()
                 if (!target.isNullOrEmpty()) add(target)
             }
+        return "claude" to args
+    }
 
-        val result = Cli.exec("claude", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("claude install exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude install")
     }
 }

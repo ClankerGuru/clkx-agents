@@ -7,11 +7,11 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeServeTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> = "opencode" to listOf("serve")
+
     @TaskAction
     fun run() {
-        val result = Cli.exec("opencode", listOf("serve"), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("opencode serve exited with code ${result.exitCode}")
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "opencode serve")
     }
 }

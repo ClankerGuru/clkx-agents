@@ -7,15 +7,16 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class CodexMcpAddTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val name =
             project.findProperty("name")?.toString()
                 ?: error("Required property 'name' not set. Use -Pname=\"...\"")
+        return "codex" to listOf("mcp", "add", name)
+    }
 
-        val result = Cli.exec("codex", listOf("mcp", "add", name), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("codex mcp add exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "codex mcp add")
     }
 }

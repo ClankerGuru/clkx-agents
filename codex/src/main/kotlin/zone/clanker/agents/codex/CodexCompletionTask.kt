@@ -7,15 +7,16 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class CodexCompletionTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val shell =
             project.findProperty("shell")?.toString()
                 ?: error("Required property 'shell' not set. Use -Pshell=bash|zsh|fish")
+        return "codex" to listOf("completion", shell)
+    }
 
-        val result = Cli.exec("codex", listOf("completion", shell), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("codex completion exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "codex completion")
     }
 }

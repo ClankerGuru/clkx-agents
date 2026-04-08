@@ -11,8 +11,7 @@ open class CodexReviewTask : DefaultTask() {
     @Internal
     lateinit var extension: Codex.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val args =
             buildList {
                 add("review")
@@ -34,10 +33,12 @@ open class CodexReviewTask : DefaultTask() {
                 }
                 addAll(extension.extraArgs)
             }
+        return "codex" to args
+    }
 
-        val result = Cli.exec("codex", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("codex review exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "codex review")
     }
 }

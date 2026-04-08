@@ -7,11 +7,11 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class ClaudeMcpServeTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> = "claude" to listOf("mcp", "serve")
+
     @TaskAction
     fun run() {
-        val result = Cli.exec("claude", listOf("mcp", "serve"), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("claude mcp serve exited with code ${result.exitCode}")
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude mcp serve")
     }
 }

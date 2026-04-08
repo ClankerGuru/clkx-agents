@@ -11,8 +11,7 @@ open class CopilotResumeTask : DefaultTask() {
     @Internal
     lateinit var extension: Copilot.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val sessionId =
             project.findProperty("sessionId")?.toString()
                 ?: error("Required property 'sessionId' not set. Use -PsessionId=\"...\"")
@@ -23,10 +22,12 @@ open class CopilotResumeTask : DefaultTask() {
                 add(sessionId)
                 addAll(extension.extraArgs)
             }
+        return "copilot" to args
+    }
 
-        val result = Cli.exec("copilot", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("copilot exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "copilot")
     }
 }

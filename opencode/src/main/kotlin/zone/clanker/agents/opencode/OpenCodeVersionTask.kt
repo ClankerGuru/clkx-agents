@@ -7,10 +7,11 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeVersionTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> = "opencode" to listOf("--version")
+
     @TaskAction
     fun run() {
-        val result = Cli.exec("opencode", listOf("--version"))
-        print(result.stdout)
-        if (!result.success) error("opencode --version exited with code ${result.exitCode}")
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, label = "opencode --version")
     }
 }

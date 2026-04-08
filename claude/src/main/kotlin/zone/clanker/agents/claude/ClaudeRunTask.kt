@@ -11,17 +11,17 @@ open class ClaudeRunTask : DefaultTask() {
     @Internal
     lateinit var extension: Claude.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val prompt =
             project.findProperty("prompt")?.toString()
                 ?: error("Required property 'prompt' not set. Use -Pprompt=\"...\"")
+        return "claude" to buildArgs(prompt)
+    }
 
-        val args = buildArgs(prompt)
-        val result = Cli.exec("claude", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("claude exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude")
     }
 
     internal fun buildArgs(prompt: String): List<String> =

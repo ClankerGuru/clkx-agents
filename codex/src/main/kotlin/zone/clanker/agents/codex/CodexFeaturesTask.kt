@@ -7,11 +7,11 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class CodexFeaturesTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> = "codex" to listOf("features", "list")
+
     @TaskAction
     fun run() {
-        val result = Cli.exec("codex", listOf("features", "list"), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("codex features list exited with code ${result.exitCode}")
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "codex features list")
     }
 }

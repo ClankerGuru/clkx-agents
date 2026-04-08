@@ -13,9 +13,17 @@ tasks.withType<Test>().configureEach {
 
 kover {
     reports {
+        filters {
+            excludes {
+                // Exclude @TaskAction run() methods — trivial delegation to Cli.execAndPrint
+                annotatedBy("org.gradle.api.tasks.TaskAction")
+                // Exclude Settings plugin apply() — requires real Gradle Settings, tested via registerTasks
+                classes("*\$SettingsPlugin", "*\$SettingsPlugin\$*")
+            }
+        }
         verify {
             rule {
-                minBound(45)
+                minBound(90)
             }
         }
     }

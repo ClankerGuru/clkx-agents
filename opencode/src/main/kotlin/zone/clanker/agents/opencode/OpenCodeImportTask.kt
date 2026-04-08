@@ -7,15 +7,16 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeImportTask : DefaultTask() {
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val file =
             project.findProperty("file")?.toString()
                 ?: error("Required property 'file' not set. Use -Pfile=\"...\"")
+        return "opencode" to listOf("import", file)
+    }
 
-        val result = Cli.exec("opencode", listOf("import", file), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("opencode import exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "opencode import")
     }
 }

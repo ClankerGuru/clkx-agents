@@ -7,11 +7,11 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeGithubRunTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> = "opencode" to listOf("github", "run")
+
     @TaskAction
     fun run() {
-        val result = Cli.exec("opencode", listOf("github", "run"), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("opencode github run exited with code ${result.exitCode}")
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "opencode github run")
     }
 }

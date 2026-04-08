@@ -11,17 +11,17 @@ open class CopilotRunTask : DefaultTask() {
     @Internal
     lateinit var extension: Copilot.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val prompt =
             project.findProperty("prompt")?.toString()
                 ?: error("Required property 'prompt' not set. Use -Pprompt=\"...\"")
+        return "copilot" to buildArgs(prompt)
+    }
 
-        val args = buildArgs(prompt)
-        val result = Cli.exec("copilot", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("copilot exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "copilot")
     }
 
     internal fun buildArgs(prompt: String): List<String> =
