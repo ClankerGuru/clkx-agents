@@ -87,7 +87,8 @@ class CopilotTaskCommandsTest :
         }
 
         given("CopilotPluginUninstallTask.buildCommand") {
-            val project = ProjectBuilder.builder().withName("my-plugin").build()
+            val project = ProjectBuilder.builder().build()
+            project.extensions.extraProperties["pluginName"] = "my-plugin"
             val task = project.tasks.create("test-plugin-uninstall", CopilotPluginUninstallTask::class.java)
 
             then("it returns copilot plugin uninstall with name") {

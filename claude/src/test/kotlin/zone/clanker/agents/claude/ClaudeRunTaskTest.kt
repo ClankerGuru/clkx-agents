@@ -95,7 +95,7 @@ class ClaudeRunTaskTest :
                 ext.allowedTools = listOf("Read", "Write")
                 val args = task.buildArgs("Test")
                 then("it includes allowed tools") {
-                    args shouldContain "--allowedTools"
+                    args shouldContain "--allowed-tools"
                     args shouldContain "Read"
                     args shouldContain "Write"
                 }
@@ -105,7 +105,7 @@ class ClaudeRunTaskTest :
                 ext.disallowedTools = listOf("Bash")
                 val args = task.buildArgs("Test")
                 then("it includes disallowed tools") {
-                    args shouldContain "--disallowedTools"
+                    args shouldContain "--disallowed-tools"
                     args shouldContain "Bash"
                 }
             }

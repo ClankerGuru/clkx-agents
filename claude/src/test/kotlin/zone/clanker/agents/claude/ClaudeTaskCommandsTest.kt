@@ -97,11 +97,12 @@ class ClaudeTaskCommandsTest :
         }
 
         given("ClaudeMcpAddTask.buildCommand") {
-            val project = ProjectBuilder.builder().withName("my-server").build()
+            val project = ProjectBuilder.builder().build()
+            project.extensions.extraProperties["mcpName"] = "my-server"
             project.extensions.extraProperties["transport"] = "stdio"
             val task = project.tasks.create("test-mcp-add", ClaudeMcpAddTask::class.java)
 
-            `when`("name and transport are set") {
+            `when`("mcpName and transport are set") {
                 then("it returns claude mcp add with name and transport") {
                     val (binary, args) = task.buildCommand()
                     binary shouldBe "claude"
@@ -111,7 +112,8 @@ class ClaudeTaskCommandsTest :
         }
 
         given("ClaudeMcpAddTask.buildCommand without transport") {
-            val project = ProjectBuilder.builder().withName("my-server").build()
+            val project = ProjectBuilder.builder().build()
+            project.extensions.extraProperties["mcpName"] = "my-server"
             val task = project.tasks.create("test-mcp-add-no-transport", ClaudeMcpAddTask::class.java)
 
             then("it throws when transport is missing") {
@@ -122,7 +124,8 @@ class ClaudeTaskCommandsTest :
         }
 
         given("ClaudeMcpRemoveTask.buildCommand") {
-            val project = ProjectBuilder.builder().withName("my-server").build()
+            val project = ProjectBuilder.builder().build()
+            project.extensions.extraProperties["mcpName"] = "my-server"
             val task = project.tasks.create("test-mcp-remove", ClaudeMcpRemoveTask::class.java)
 
             then("it returns claude mcp remove with name") {

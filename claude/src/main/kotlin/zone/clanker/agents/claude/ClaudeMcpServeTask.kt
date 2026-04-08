@@ -12,6 +12,7 @@ open class ClaudeMcpServeTask : DefaultTask() {
     @TaskAction
     fun run() {
         val (binary, args) = buildCommand()
-        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude mcp serve")
+        val pid = Cli.execDaemon(binary, args, workDir = project.projectDir)
+        println("Started $binary (PID: $pid)")
     }
 }

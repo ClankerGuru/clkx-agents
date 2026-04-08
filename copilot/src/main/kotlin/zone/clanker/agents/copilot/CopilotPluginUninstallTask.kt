@@ -9,8 +9,8 @@ import zone.clanker.agents.exec.Cli
 open class CopilotPluginUninstallTask : DefaultTask() {
     internal fun buildCommand(): Pair<String, List<String>> {
         val name =
-            project.findProperty("name")?.toString()
-                ?: error("Required property 'name' not set. Use -Pname=\"...\"")
+            project.findProperty("pluginName")?.toString()
+                ?: error("Required property 'pluginName' not set. Use -PpluginName=\"...\"")
         return "copilot" to listOf("plugin", "uninstall", name)
     }
 

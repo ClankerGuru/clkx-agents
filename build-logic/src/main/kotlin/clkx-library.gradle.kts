@@ -5,6 +5,8 @@ plugins {
     id("clkx-module")
     id("clkx-toolchain")
     id("clkx-testing")
+    id("clkx-cover")
+    id("clkx-konsist")
     id("clkx-detekt")
     id("clkx-ktlint")
     id("com.vanniktech.maven.publish")

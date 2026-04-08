@@ -35,8 +35,8 @@ open class ClaudeRunTask : DefaultTask() {
             addFlag("--effort", extension.effort)
             if (extension.maxBudgetUsd > 0) addFlag("--max-budget-usd", extension.maxBudgetUsd.toString())
             addFlag("--system-prompt", extension.systemPrompt)
-            extension.allowedTools.forEach { addFlag("--allowedTools", it) }
-            extension.disallowedTools.forEach { addFlag("--disallowedTools", it) }
+            extension.allowedTools.forEach { addFlag("--allowed-tools", it) }
+            extension.disallowedTools.forEach { addFlag("--disallowed-tools", it) }
             if (extension.bare) add("--bare")
             if (extension.dangerouslySkipPermissions) add("--dangerously-skip-permissions")
             if (extension.verbose) add("--verbose")

@@ -73,5 +73,19 @@ object Cli {
         return result
     }
 
+    fun execDaemon(
+        binary: String,
+        args: List<String> = emptyList(),
+        workDir: File? = null,
+    ): Long {
+        val command = listOf(binary) + args
+        val process =
+            ProcessBuilder(command)
+                .directory(workDir)
+                .inheritIO()
+                .start()
+        return process.pid()
+    }
+
     fun which(binary: String): Boolean = exec(binary = "which", args = listOf(binary)).success
 }

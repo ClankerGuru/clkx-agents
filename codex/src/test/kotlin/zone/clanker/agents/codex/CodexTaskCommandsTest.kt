@@ -76,7 +76,8 @@ class CodexTaskCommandsTest :
         }
 
         given("CodexMcpAddTask.buildCommand") {
-            val project = ProjectBuilder.builder().withName("my-mcp").build()
+            val project = ProjectBuilder.builder().build()
+            project.extensions.extraProperties["mcpName"] = "my-mcp"
             val task = project.tasks.create("test-mcp-add", CodexMcpAddTask::class.java)
 
             then("it returns codex mcp add with name") {
@@ -87,7 +88,8 @@ class CodexTaskCommandsTest :
         }
 
         given("CodexMcpRemoveTask.buildCommand") {
-            val project = ProjectBuilder.builder().withName("my-mcp").build()
+            val project = ProjectBuilder.builder().build()
+            project.extensions.extraProperties["mcpName"] = "my-mcp"
             val task = project.tasks.create("test-mcp-remove", CodexMcpRemoveTask::class.java)
 
             then("it returns codex mcp remove with name") {

@@ -83,6 +83,15 @@ class CliTest :
             }
         }
 
+        given("Cli.execDaemon") {
+            `when`("running a short-lived process") {
+                val pid = Cli.execDaemon("sleep", listOf("0.1"))
+                then("it returns a valid PID") {
+                    pid shouldNotBe 0L
+                }
+            }
+        }
+
         given("Cli.which") {
             `when`("checking for echo") {
                 then("it finds echo") {

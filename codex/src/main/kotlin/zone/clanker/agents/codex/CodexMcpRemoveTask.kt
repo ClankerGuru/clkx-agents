@@ -9,8 +9,8 @@ import zone.clanker.agents.exec.Cli
 open class CodexMcpRemoveTask : DefaultTask() {
     internal fun buildCommand(): Pair<String, List<String>> {
         val name =
-            project.findProperty("name")?.toString()
-                ?: error("Required property 'name' not set. Use -Pname=\"...\"")
+            project.findProperty("mcpName")?.toString()
+                ?: error("Required property 'mcpName' not set. Use -PmcpName=\"...\"")
         return "codex" to listOf("mcp", "remove", name)
     }
 
