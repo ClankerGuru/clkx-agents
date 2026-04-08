@@ -1,0 +1,1 @@
+plugins { id("clkx-module") }
