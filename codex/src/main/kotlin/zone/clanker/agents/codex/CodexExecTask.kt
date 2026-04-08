@@ -24,7 +24,7 @@ open class CodexExecTask : DefaultTask() {
         if (!result.success) error("codex exited with code ${result.exitCode}")
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add(prompt)
             addFlag("--model", extension.model)

@@ -13,6 +13,10 @@ data object Copilot {
     const val TASK_INIT = "copilot-init"
     const val TASK_AUTH = "copilot-auth"
     const val TASK_VERSION = "copilot-version"
+    const val TASK_UPDATE = "copilot-update"
+    const val TASK_PLUGIN_LIST = "copilot-plugin-list"
+    const val TASK_PLUGIN_INSTALL = "copilot-plugin-install"
+    const val TASK_PLUGIN_UNINSTALL = "copilot-plugin-uninstall"
 
     open class SettingsExtension {
         var model: String = ""
@@ -65,6 +69,22 @@ data object Copilot {
         rootProject.tasks.register(TASK_VERSION, CopilotVersionTask::class.java) {
             it.group = GROUP
             it.description = "Show Copilot version"
+        }
+        rootProject.tasks.register(TASK_UPDATE, CopilotUpdateTask::class.java) {
+            it.group = GROUP
+            it.description = "Update Copilot"
+        }
+        rootProject.tasks.register(TASK_PLUGIN_LIST, CopilotPluginListTask::class.java) {
+            it.group = GROUP
+            it.description = "List Copilot plugins"
+        }
+        rootProject.tasks.register(TASK_PLUGIN_INSTALL, CopilotPluginInstallTask::class.java) {
+            it.group = GROUP
+            it.description = "Install a Copilot plugin"
+        }
+        rootProject.tasks.register(TASK_PLUGIN_UNINSTALL, CopilotPluginUninstallTask::class.java) {
+            it.group = GROUP
+            it.description = "Uninstall a Copilot plugin"
         }
     }
 }

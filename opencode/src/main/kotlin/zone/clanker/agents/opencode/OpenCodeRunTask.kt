@@ -24,7 +24,7 @@ open class OpenCodeRunTask : DefaultTask() {
         if (!result.success) error("opencode exited with code ${result.exitCode}")
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add("--prompt")
             add(prompt)

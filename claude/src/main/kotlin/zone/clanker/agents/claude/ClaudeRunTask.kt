@@ -24,7 +24,7 @@ open class ClaudeRunTask : DefaultTask() {
         if (!result.success) error("claude exited with code ${result.exitCode}")
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add("-p")
             add(prompt)

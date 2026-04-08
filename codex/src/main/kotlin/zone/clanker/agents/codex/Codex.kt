@@ -12,6 +12,15 @@ data object Codex {
     const val TASK_REVIEW = "codex-review"
     const val TASK_AUTH = "codex-auth"
     const val TASK_VERSION = "codex-version"
+    const val TASK_APPLY = "codex-apply"
+    const val TASK_RESUME = "codex-resume"
+    const val TASK_FORK = "codex-fork"
+    const val TASK_MCP_LIST = "codex-mcp-list"
+    const val TASK_MCP_ADD = "codex-mcp-add"
+    const val TASK_MCP_REMOVE = "codex-mcp-remove"
+    const val TASK_FEATURES = "codex-features"
+    const val TASK_COMPLETION = "codex-completion"
+    const val TASK_CLOUD_LIST = "codex-cloud-list"
 
     open class SettingsExtension {
         var model: String = ""
@@ -59,6 +68,42 @@ data object Codex {
         rootProject.tasks.register(TASK_VERSION, CodexVersionTask::class.java) {
             it.group = GROUP
             it.description = "Show Codex version"
+        }
+        rootProject.tasks.register(TASK_APPLY, CodexApplyTask::class.java) {
+            it.group = GROUP
+            it.description = "Apply latest Codex diff"
+        }
+        rootProject.tasks.register(TASK_RESUME, CodexResumeTask::class.java) {
+            it.group = GROUP
+            it.description = "Resume a Codex session"
+        }
+        rootProject.tasks.register(TASK_FORK, CodexForkTask::class.java) {
+            it.group = GROUP
+            it.description = "Fork a Codex session"
+        }
+        rootProject.tasks.register(TASK_MCP_LIST, CodexMcpListTask::class.java) {
+            it.group = GROUP
+            it.description = "List Codex MCP servers"
+        }
+        rootProject.tasks.register(TASK_MCP_ADD, CodexMcpAddTask::class.java) {
+            it.group = GROUP
+            it.description = "Add a Codex MCP server"
+        }
+        rootProject.tasks.register(TASK_MCP_REMOVE, CodexMcpRemoveTask::class.java) {
+            it.group = GROUP
+            it.description = "Remove a Codex MCP server"
+        }
+        rootProject.tasks.register(TASK_FEATURES, CodexFeaturesTask::class.java) {
+            it.group = GROUP
+            it.description = "List Codex features"
+        }
+        rootProject.tasks.register(TASK_COMPLETION, CodexCompletionTask::class.java) {
+            it.group = GROUP
+            it.description = "Generate Codex shell completions"
+        }
+        rootProject.tasks.register(TASK_CLOUD_LIST, CodexCloudListTask::class.java) {
+            it.group = GROUP
+            it.description = "List Codex cloud sessions"
         }
     }
 }

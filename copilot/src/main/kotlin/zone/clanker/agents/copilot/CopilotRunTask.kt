@@ -24,7 +24,7 @@ open class CopilotRunTask : DefaultTask() {
         if (!result.success) error("copilot exited with code ${result.exitCode}")
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add("-m")
             add(prompt)
