@@ -4,53 +4,66 @@
 [![Maven Central](https://img.shields.io/maven-central/v/zone.clanker/clkx-agents)](https://central.sonatype.com/namespace/zone.clanker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Gradle plugins for AI coding agents -- Claude Code, GitHub Copilot, OpenAI Codex, and OpenCode.
+Gradle settings plugins for AI coding agents -- Claude Code, GitHub Copilot, OpenAI Codex, and OpenCode.
 
 ## Modules
 
-| Module | Plugin ID | Binary | Description |
-|--------|-----------|--------|-------------|
-| `:exec` | -- | -- | Core process execution utility |
-| `:claude` | `zone.clanker.claude` | `claude` | Claude Code CLI |
-| `:copilot` | `zone.clanker.copilot` | `copilot` | GitHub Copilot CLI |
-| `:codex` | `zone.clanker.codex` | `codex` | OpenAI Codex CLI |
-| `:opencode` | `zone.clanker.opencode` | `opencode` | OpenCode CLI |
+| Module | Plugin ID | Tasks | README |
+|--------|-----------|-------|--------|
+| [`:exec`](exec/) | -- | -- | [exec/README.md](exec/README.md) |
+| [`:claude`](claude/) | `zone.clanker.claude` | 13 | [claude/README.md](claude/README.md) |
+| [`:copilot`](copilot/) | `zone.clanker.copilot` | 9 | [copilot/README.md](copilot/README.md) |
+| [`:codex`](codex/) | `zone.clanker.codex` | 13 | [codex/README.md](codex/README.md) |
+| [`:opencode`](opencode/) | `zone.clanker.opencode` | 18 | [opencode/README.md](opencode/README.md) |
 
-## Usage
+## Install the CLIs
 
-Apply the plugin for the agent you want to use:
+```bash
+# Claude Code
+bun install -g @anthropic-ai/claude-code
+
+# GitHub Copilot
+brew install --cask copilot-cli      # or: bun install -g @github/copilot
+
+# OpenAI Codex
+brew install --cask codex            # or: bun install -g @openai/codex
+
+# OpenCode
+brew install opencode                # or: bun install -g opencode-ai
+```
+
+## Quick Start
+
+Apply the plugin for the agent you want to use in `settings.gradle.kts`:
 
 ```kotlin
 plugins {
     id("zone.clanker.claude") version "<version>"
 }
+
+claude {
+    model = "opus"
+    effort = "high"
+}
+```
+
+Then run tasks from the command line:
+
+```bash
+./gradlew claude-run -Pprompt="Fix the build"
 ```
 
 ### Claude Code
 
 ```bash
-# Run with a prompt
 ./gradlew claude-run -Pprompt="Fix the build"
-
-# Resume a session
 ./gradlew claude-resume -PsessionId="abc123"
-
-# Check auth / version / health
 ./gradlew claude-auth
 ./gradlew claude-version
 ./gradlew claude-doctor
 ```
 
-Configure defaults in `build.gradle.kts`:
-
-```kotlin
-claude {
-    model = "claude-sonnet-4-20250514"
-    outputFormat = "json"
-    permissionMode = "bypassPermissions"
-    effort = "high"
-}
-```
+See [claude/README.md](claude/README.md) for all 13 tasks and configuration options.
 
 ### GitHub Copilot
 
@@ -62,15 +75,7 @@ claude {
 ./gradlew copilot-version
 ```
 
-Configure defaults:
-
-```kotlin
-copilot {
-    model = "gpt-4o"
-    autopilot = true
-    allowAll = true
-}
-```
+See [copilot/README.md](copilot/README.md) for all 9 tasks and configuration options.
 
 ### OpenAI Codex
 
@@ -81,15 +86,7 @@ copilot {
 ./gradlew codex-version
 ```
 
-Configure defaults:
-
-```kotlin
-codex {
-    model = "codex-mini-latest"
-    fullAuto = true
-    sandbox = "docker"
-}
-```
+See [codex/README.md](codex/README.md) for all 13 tasks and configuration options.
 
 ### OpenCode
 
@@ -100,15 +97,7 @@ codex {
 ./gradlew opencode-version
 ```
 
-Configure defaults:
-
-```kotlin
-opencode {
-    model = "anthropic/claude-sonnet-4-20250514"
-    thinking = true
-    format = "json"
-}
-```
+See [opencode/README.md](opencode/README.md) for all 18 tasks and configuration options.
 
 ## Building
 

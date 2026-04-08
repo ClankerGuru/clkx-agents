@@ -1,0 +1,25 @@
+package zone.clanker.agents.claude
+
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.UntrackedTask
+import zone.clanker.agents.exec.Cli
+
+@UntrackedTask(because = "Executes external CLI")
+open class ClaudeInstallTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> {
+        val args =
+            buildList {
+                add("install")
+                val target = project.findProperty("target")?.toString()
+                if (!target.isNullOrEmpty()) add(target)
+            }
+        return "claude" to args
+    }
+
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude install")
+    }
+}

@@ -1,16 +1,18 @@
 plugins {
+    `java-library`
     kotlin("jvm")
-    id("io.gitlab.arturbosch.detekt")
-    id("org.jlleitschuh.gradle.ktlint")
 }
 
-kotlin { jvmToolchain(17) }
+group = "zone.clanker"
 
-tasks.withType<Test>().configureEach {
+dependencies {
+    "implementation"(gradleApi())
+}
+
+tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-dependencies {
-    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
-    testImplementation("io.kotest:kotest-assertions-core:5.9.1")
+tasks.withType<PublishToMavenRepository>().configureEach {
+    dependsOn(tasks.withType<Sign>())
 }

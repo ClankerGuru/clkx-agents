@@ -7,11 +7,11 @@ import zone.clanker.agents.exec.Cli
 
 @UntrackedTask(because = "Executes external CLI")
 open class CopilotAuthTask : DefaultTask() {
+    internal fun buildCommand(): Pair<String, List<String>> = "copilot" to listOf("login")
+
     @TaskAction
     fun run() {
-        val result = Cli.exec("copilot", listOf("login"), workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("copilot login exited with code ${result.exitCode}")
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "copilot login")
     }
 }

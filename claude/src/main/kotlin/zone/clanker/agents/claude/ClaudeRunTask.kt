@@ -9,22 +9,22 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class ClaudeRunTask : DefaultTask() {
     @Internal
-    lateinit var extension: ClaudeExtension
+    lateinit var extension: Claude.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val prompt =
             project.findProperty("prompt")?.toString()
                 ?: error("Required property 'prompt' not set. Use -Pprompt=\"...\"")
-
-        val args = buildArgs(prompt)
-        val result = Cli.exec("claude", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("claude exited with code ${result.exitCode}")
+        return "claude" to buildArgs(prompt)
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude")
+    }
+
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add("-p")
             add(prompt)
@@ -35,8 +35,13 @@ open class ClaudeRunTask : DefaultTask() {
             addFlag("--effort", extension.effort)
             if (extension.maxBudgetUsd > 0) addFlag("--max-budget-usd", extension.maxBudgetUsd.toString())
             addFlag("--system-prompt", extension.systemPrompt)
-            extension.allowedTools.forEach { addFlag("--allowedTools", it) }
-            extension.disallowedTools.forEach { addFlag("--disallowedTools", it) }
+            extension.allowedTools.forEach { addFlag("--allowed-tools", it) }
+            extension.disallowedTools.forEach { addFlag("--disallowed-tools", it) }
+            if (extension.bare) add("--bare")
+            if (extension.dangerouslySkipPermissions) add("--dangerously-skip-permissions")
+            if (extension.verbose) add("--verbose")
+            extension.addDir.forEach { addFlag("--add-dir", it) }
+            addFlag("--append-system-prompt", extension.appendSystemPrompt)
             addAll(extension.extraArgs)
         }
 

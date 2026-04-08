@@ -1,15 +1,9 @@
 pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
     includeBuild("build-logic")
 }
 
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-    }
+plugins {
+    id("clkx-settings")
 }
 
 rootProject.name = "clkx-agents"

@@ -1,4 +1,4 @@
-plugins { id("clkx-plugin") }
+plugins { id("clkx-conventions") }
 
 dependencies { implementation(project(":exec")) }
 
@@ -6,7 +6,7 @@ gradlePlugin {
     plugins {
         register("copilot") {
             id = "zone.clanker.copilot"
-            implementationClass = "zone.clanker.agents.copilot.CopilotPlugin"
+            implementationClass = "zone.clanker.agents.copilot.Copilot\$SettingsPlugin"
             displayName = "GitHub Copilot Plugin"
             description = "Gradle tasks for GitHub Copilot CLI"
         }

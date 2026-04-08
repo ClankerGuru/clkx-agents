@@ -9,10 +9,9 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class ClaudeResumeTask : DefaultTask() {
     @Internal
-    lateinit var extension: ClaudeExtension
+    lateinit var extension: Claude.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val sessionId =
             project.findProperty("sessionId")?.toString()
                 ?: error("Required property 'sessionId' not set. Use -PsessionId=\"...\"")
@@ -29,10 +28,12 @@ open class ClaudeResumeTask : DefaultTask() {
                 if (project.findProperty("forkSession")?.toString()?.toBoolean() == true) add("--fork")
                 addAll(extension.extraArgs)
             }
+        return "claude" to args
+    }
 
-        val result = Cli.exec("claude", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("claude exited with code ${result.exitCode}")
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude")
     }
 }

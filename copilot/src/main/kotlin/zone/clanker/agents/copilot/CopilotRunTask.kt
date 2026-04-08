@@ -9,22 +9,22 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class CopilotRunTask : DefaultTask() {
     @Internal
-    lateinit var extension: CopilotExtension
+    lateinit var extension: Copilot.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val prompt =
             project.findProperty("prompt")?.toString()
                 ?: error("Required property 'prompt' not set. Use -Pprompt=\"...\"")
-
-        val args = buildArgs(prompt)
-        val result = Cli.exec("copilot", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("copilot exited with code ${result.exitCode}")
+        return "copilot" to buildArgs(prompt)
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "copilot")
+    }
+
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add("-m")
             add(prompt)
@@ -39,11 +39,18 @@ open class CopilotRunTask : DefaultTask() {
         }
 
     private fun MutableList<String>.addBooleanFlags() {
-        if (extension.allowAll) add("--allow-all")
+        if (extension.yolo) {
+            add("--yolo")
+        } else if (extension.allowAll) {
+            add("--allow-all")
+        }
         if (extension.allowAllTools) add("--allow-all-tools")
         if (extension.allowAllPaths) add("--allow-all-paths")
+        if (extension.allowAllUrls) add("--allow-all-urls")
         if (extension.autopilot) add("--autopilot")
         if (extension.silent) add("--silent")
+        if (extension.noAskUser) add("--no-ask-user")
+        if (extension.noCustomInstructions) add("--no-custom-instructions")
     }
 
     private fun MutableList<String>.addFlag(

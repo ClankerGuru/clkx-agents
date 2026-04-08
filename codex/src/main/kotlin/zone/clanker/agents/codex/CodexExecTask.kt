@@ -9,22 +9,22 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class CodexExecTask : DefaultTask() {
     @Internal
-    lateinit var extension: CodexExtension
+    lateinit var extension: Codex.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val prompt =
             project.findProperty("prompt")?.toString()
                 ?: error("Required property 'prompt' not set. Use -Pprompt=\"...\"")
-
-        val args = buildArgs(prompt)
-        val result = Cli.exec("codex", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("codex exited with code ${result.exitCode}")
+        return "codex" to buildArgs(prompt)
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "codex")
+    }
+
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add(prompt)
             addFlag("--model", extension.model)
@@ -37,6 +37,7 @@ open class CodexExecTask : DefaultTask() {
             if (extension.json) add("--json")
             if (extension.ephemeral) add("--ephemeral")
             extension.image.forEach { addFlag("--image", it) }
+            if (extension.dangerouslyBypass) add("--dangerously-bypass-approvals-and-sandbox")
             addAll(extension.extraArgs)
         }
 

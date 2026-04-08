@@ -9,22 +9,22 @@ import zone.clanker.agents.exec.Cli
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeRunTask : DefaultTask() {
     @Internal
-    lateinit var extension: OpenCodeExtension
+    lateinit var extension: OpenCode.SettingsExtension
 
-    @TaskAction
-    fun run() {
+    internal fun buildCommand(): Pair<String, List<String>> {
         val prompt =
             project.findProperty("prompt")?.toString()
                 ?: error("Required property 'prompt' not set. Use -Pprompt=\"...\"")
-
-        val args = buildArgs(prompt)
-        val result = Cli.exec("opencode", args, workDir = project.projectDir)
-        print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
-        if (!result.success) error("opencode exited with code ${result.exitCode}")
+        return "opencode" to buildArgs(prompt)
     }
 
-    private fun buildArgs(prompt: String): List<String> =
+    @TaskAction
+    fun run() {
+        val (binary, args) = buildCommand()
+        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "opencode")
+    }
+
+    internal fun buildArgs(prompt: String): List<String> =
         buildList {
             add("--prompt")
             add(prompt)
@@ -36,6 +36,9 @@ open class OpenCodeRunTask : DefaultTask() {
             extension.file.forEach { addFlag("--file", it) }
             addFlag("--dir", extension.dir)
             if (extension.share) add("--share")
+            if (extension.pure) add("--pure")
+            addFlag("--title", extension.title)
+            if (extension.continueSession) add("--continue")
             addAll(extension.extraArgs)
         }
 

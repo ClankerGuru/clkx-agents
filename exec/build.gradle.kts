@@ -1,1 +1,1 @@
-plugins { id("clkx-module") }
+plugins { id("clkx-library") }
