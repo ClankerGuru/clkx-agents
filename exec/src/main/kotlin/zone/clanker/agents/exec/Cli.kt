@@ -1,7 +1,7 @@
 package zone.clanker.agents.exec
 
+import org.gradle.api.logging.Logging
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 data class CliResult(
@@ -26,30 +26,40 @@ data class CliRequest(
 }
 
 object Cli {
+    private val logger = Logging.getLogger(Cli::class.java)
+
     fun exec(request: CliRequest): CliResult {
         val command = listOf(request.binary) + request.args
         val process =
-            try {
+            runCatching {
                 ProcessBuilder(command)
                     .directory(request.workDir)
                     .also { pb -> request.env.forEach { (k, v) -> pb.environment()[k] = v } }
                     .start()
-            } catch (e: IOException) {
-                return CliResult(-1, "", e.message ?: "Failed to start process")
+            }.getOrElse { e ->
+                return CliResult(-1, "", "Failed to start ${request.binary}: ${e.message}")
             }
 
         if (request.stdin != null) {
             process.outputStream.bufferedWriter().use { it.write(request.stdin) }
         }
 
-        val stdout = process.inputStream.bufferedReader().readText()
-        val stderr = process.errorStream.bufferedReader().readText()
+        var stdout = ""
+        var stderr = ""
+        val stdoutThread = Thread { stdout = process.inputStream.bufferedReader().readText() }
+        val stderrThread = Thread { stderr = process.errorStream.bufferedReader().readText() }
+        stdoutThread.start()
+        stderrThread.start()
         val completed = process.waitFor(request.timeoutSeconds, TimeUnit.SECONDS)
 
         return if (!completed) {
             process.destroyForcibly()
+            stdoutThread.join()
+            stderrThread.join()
             CliResult(-1, stdout, "Process timed out after ${request.timeoutSeconds}s")
         } else {
+            stdoutThread.join()
+            stderrThread.join()
             CliResult(process.exitValue(), stdout, stderr)
         }
     }
@@ -65,10 +75,21 @@ object Cli {
         args: List<String> = emptyList(),
         workDir: File? = null,
         label: String = "$binary ${args.firstOrNull() ?: ""}".trim(),
+        timeoutSeconds: Long = CliRequest.DEFAULT_TIMEOUT_SECONDS,
     ): CliResult {
-        val result = exec(binary, args, workDir)
+        if (which(binary) == null) {
+            error("'$binary' not found. Install it first.")
+        }
+        val request =
+            CliRequest(
+                binary = binary,
+                args = args,
+                workDir = workDir,
+                timeoutSeconds = timeoutSeconds,
+            )
+        val result = exec(request)
         print(result.stdout)
-        if (result.stderr.isNotEmpty()) System.err.print(result.stderr)
+        if (result.stderr.isNotEmpty()) logger.warn(result.stderr)
         if (!result.success) error("$label exited with code ${result.exitCode}")
         return result
     }
@@ -87,5 +108,8 @@ object Cli {
         return process.pid()
     }
 
-    fun which(binary: String): Boolean = exec(binary = "which", args = listOf(binary)).success
+    fun which(binary: String): String? {
+        val result = exec(binary = "which", args = listOf(binary))
+        return if (result.success) result.stdout.trim() else null
+    }
 }

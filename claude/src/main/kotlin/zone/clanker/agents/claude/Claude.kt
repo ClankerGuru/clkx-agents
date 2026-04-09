@@ -4,6 +4,7 @@ import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
+import zone.clanker.agents.exec.CliRequest
 
 data object Claude {
     const val GROUP = "claude"
@@ -36,6 +37,7 @@ data object Claude {
         var verbose: Boolean = false
         var addDir: List<String> = emptyList()
         var appendSystemPrompt: String = ""
+        var timeoutSeconds: Long = CliRequest.DEFAULT_TIMEOUT_SECONDS
         var extraArgs: List<String> = emptyList()
     }
 

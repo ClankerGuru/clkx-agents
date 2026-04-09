@@ -5,6 +5,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
 import zone.clanker.agents.exec.Cli
+import zone.clanker.agents.exec.addFlag
 
 @UntrackedTask(because = "Executes external CLI")
 open class CopilotRunTask : DefaultTask() {
@@ -20,8 +21,17 @@ open class CopilotRunTask : DefaultTask() {
 
     @TaskAction
     fun run() {
+        if (extension.yolo) {
+            logger.warn("copilot: --yolo is enabled")
+        }
         val (binary, args) = buildCommand()
-        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "copilot")
+        Cli.execAndPrint(
+            binary,
+            args,
+            workDir = project.projectDir,
+            label = "copilot",
+            timeoutSeconds = extension.timeoutSeconds,
+        )
     }
 
     internal fun buildArgs(prompt: String): List<String> =
@@ -51,15 +61,5 @@ open class CopilotRunTask : DefaultTask() {
         if (extension.silent) add("--silent")
         if (extension.noAskUser) add("--no-ask-user")
         if (extension.noCustomInstructions) add("--no-custom-instructions")
-    }
-
-    private fun MutableList<String>.addFlag(
-        flag: String,
-        value: String,
-    ) {
-        if (value.isNotEmpty()) {
-            add(flag)
-            add(value)
-        }
     }
 }

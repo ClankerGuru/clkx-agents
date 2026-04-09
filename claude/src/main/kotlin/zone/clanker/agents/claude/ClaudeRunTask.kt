@@ -5,6 +5,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
 import zone.clanker.agents.exec.Cli
+import zone.clanker.agents.exec.addFlag
 
 @UntrackedTask(because = "Executes external CLI")
 open class ClaudeRunTask : DefaultTask() {
@@ -20,8 +21,17 @@ open class ClaudeRunTask : DefaultTask() {
 
     @TaskAction
     fun run() {
+        if (extension.dangerouslySkipPermissions) {
+            logger.warn("claude: --dangerously-skip-permissions is enabled")
+        }
         val (binary, args) = buildCommand()
-        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "claude")
+        Cli.execAndPrint(
+            binary,
+            args,
+            workDir = project.projectDir,
+            label = "claude",
+            timeoutSeconds = extension.timeoutSeconds,
+        )
     }
 
     internal fun buildArgs(prompt: String): List<String> =
@@ -44,14 +54,4 @@ open class ClaudeRunTask : DefaultTask() {
             addFlag("--append-system-prompt", extension.appendSystemPrompt)
             addAll(extension.extraArgs)
         }
-
-    private fun MutableList<String>.addFlag(
-        flag: String,
-        value: String,
-    ) {
-        if (value.isNotEmpty()) {
-            add(flag)
-            add(value)
-        }
-    }
 }

@@ -4,6 +4,7 @@ import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
+import zone.clanker.agents.exec.CliRequest
 
 data object Copilot {
     const val GROUP = "copilot"
@@ -34,6 +35,7 @@ data object Copilot {
         var allowAllUrls: Boolean = false
         var noAskUser: Boolean = false
         var noCustomInstructions: Boolean = false
+        var timeoutSeconds: Long = CliRequest.DEFAULT_TIMEOUT_SECONDS
         var extraArgs: List<String> = emptyList()
     }
 

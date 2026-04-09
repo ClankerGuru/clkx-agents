@@ -5,6 +5,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
 import zone.clanker.agents.exec.Cli
+import zone.clanker.agents.exec.addFlag
 
 @UntrackedTask(because = "Executes external CLI")
 open class OpenCodeRunTask : DefaultTask() {
@@ -21,7 +22,13 @@ open class OpenCodeRunTask : DefaultTask() {
     @TaskAction
     fun run() {
         val (binary, args) = buildCommand()
-        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "opencode")
+        Cli.execAndPrint(
+            binary,
+            args,
+            workDir = project.projectDir,
+            label = "opencode",
+            timeoutSeconds = extension.timeoutSeconds,
+        )
     }
 
     internal fun buildArgs(prompt: String): List<String> =
@@ -41,14 +48,4 @@ open class OpenCodeRunTask : DefaultTask() {
             if (extension.continueSession) add("--continue")
             addAll(extension.extraArgs)
         }
-
-    private fun MutableList<String>.addFlag(
-        flag: String,
-        value: String,
-    ) {
-        if (value.isNotEmpty()) {
-            add(flag)
-            add(value)
-        }
-    }
 }

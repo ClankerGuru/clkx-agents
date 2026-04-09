@@ -4,6 +4,7 @@ import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
+import zone.clanker.agents.exec.CliRequest
 
 data object Codex {
     const val GROUP = "codex"
@@ -34,6 +35,7 @@ data object Codex {
         var ephemeral: Boolean = false
         var image: List<String> = emptyList()
         var dangerouslyBypass: Boolean = false
+        var timeoutSeconds: Long = CliRequest.DEFAULT_TIMEOUT_SECONDS
         var extraArgs: List<String> = emptyList()
     }
 
