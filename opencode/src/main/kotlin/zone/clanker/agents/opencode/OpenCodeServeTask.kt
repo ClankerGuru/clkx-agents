@@ -13,6 +13,6 @@ open class OpenCodeServeTask : DefaultTask() {
     fun run() {
         val (binary, args) = buildCommand()
         val pid = Cli.execDaemon(binary, args, workDir = project.projectDir)
-        println("Started $binary (PID: $pid)")
+        logger.lifecycle("Started $binary (PID: $pid)")
     }
 }

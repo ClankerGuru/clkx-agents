@@ -1,6 +1,8 @@
 package zone.clanker.agents.exec
 
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
@@ -64,7 +66,7 @@ class CliTest :
                             e
                         }
                     exception shouldNotBe null
-                    exception!!.message shouldContain "exited with code"
+                    exception!!.message shouldContain "not found"
                 }
             }
 
@@ -72,7 +74,7 @@ class CliTest :
                 then("error message uses the label") {
                     val exception =
                         try {
-                            Cli.execAndPrint("nonexistent_binary_xyz", label = "my-tool")
+                            Cli.execAndPrint("false", label = "my-tool")
                             null
                         } catch (e: IllegalStateException) {
                             e
@@ -92,16 +94,26 @@ class CliTest :
             }
         }
 
+        given("Cli.exec with timeout expiration") {
+            `when`("running a command that exceeds timeout") {
+                val result = Cli.exec(CliRequest(binary = "sleep", args = listOf("10"), timeoutSeconds = 1))
+                then("it reports timeout with exit code -1") {
+                    result.exitCode shouldBe -1
+                    result.stderr shouldContain "timed out"
+                }
+            }
+        }
+
         given("Cli.which") {
             `when`("checking for echo") {
                 then("it finds echo") {
-                    Cli.which("echo") shouldBe true
+                    Cli.which("echo").shouldNotBeNull()
                 }
             }
 
             `when`("checking for nonexistent binary") {
-                then("it returns false") {
-                    Cli.which("nonexistent_binary_xyz") shouldBe false
+                then("it returns null") {
+                    Cli.which("nonexistent_binary_xyz").shouldBeNull()
                 }
             }
         }

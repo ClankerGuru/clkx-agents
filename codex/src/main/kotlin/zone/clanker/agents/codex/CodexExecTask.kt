@@ -5,6 +5,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
 import zone.clanker.agents.exec.Cli
+import zone.clanker.agents.exec.addFlag
 
 @UntrackedTask(because = "Executes external CLI")
 open class CodexExecTask : DefaultTask() {
@@ -20,8 +21,17 @@ open class CodexExecTask : DefaultTask() {
 
     @TaskAction
     fun run() {
+        if (extension.dangerouslyBypass) {
+            logger.warn("codex: --dangerously-bypass-approvals-and-sandbox is enabled")
+        }
         val (binary, args) = buildCommand()
-        Cli.execAndPrint(binary, args, workDir = project.projectDir, label = "codex")
+        Cli.execAndPrint(
+            binary,
+            args,
+            workDir = project.projectDir,
+            label = "codex",
+            timeoutSeconds = extension.timeoutSeconds,
+        )
     }
 
     internal fun buildArgs(prompt: String): List<String> =
@@ -40,14 +50,4 @@ open class CodexExecTask : DefaultTask() {
             if (extension.dangerouslyBypass) add("--dangerously-bypass-approvals-and-sandbox")
             addAll(extension.extraArgs)
         }
-
-    private fun MutableList<String>.addFlag(
-        flag: String,
-        value: String,
-    ) {
-        if (value.isNotEmpty()) {
-            add(flag)
-            add(value)
-        }
-    }
 }

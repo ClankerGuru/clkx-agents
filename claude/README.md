@@ -94,13 +94,13 @@ claude {
 ### claude-mcp-add
 
 ```bash
-./gradlew claude-mcp-add -Pname="my-server" -Ptransport="stdio"
+./gradlew claude-mcp-add -PmcpName="my-server" -Ptransport="stdio"
 ```
 
 ### claude-mcp-remove
 
 ```bash
-./gradlew claude-mcp-remove -Pname="my-server"
+./gradlew claude-mcp-remove -PmcpName="my-server"
 ```
 
 ### claude-mcp-serve

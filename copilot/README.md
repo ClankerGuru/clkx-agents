@@ -104,7 +104,7 @@ copilot {
 ### copilot-plugin-uninstall
 
 ```bash
-./gradlew copilot-plugin-uninstall -Pname="my-plugin"
+./gradlew copilot-plugin-uninstall -PpluginName="my-plugin"
 ```
 
 ## Configuration

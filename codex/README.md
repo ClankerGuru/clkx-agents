@@ -107,13 +107,13 @@ codex {
 ### codex-mcp-add
 
 ```bash
-./gradlew codex-mcp-add -Pname="my-server"
+./gradlew codex-mcp-add -PmcpName="my-server"
 ```
 
 ### codex-mcp-remove
 
 ```bash
-./gradlew codex-mcp-remove -Pname="my-server"
+./gradlew codex-mcp-remove -PmcpName="my-server"
 ```
 
 ### codex-features
