@@ -1,4 +1,7 @@
-plugins { id("clkx-conventions") }
+plugins {
+    id("zone.clanker.build.version")
+    id("clkx-conventions")
+}
 
 dependencies { implementation(project(":exec")) }
 
