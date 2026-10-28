@@ -3,7 +3,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "zone.clanker"
+group = project.property("GROUP") as String
 
 dependencies {
     "implementation"(gradleApi())

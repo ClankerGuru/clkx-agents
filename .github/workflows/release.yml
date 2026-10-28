@@ -10,6 +10,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@v4
       - name: Configure git
@@ -17,21 +19,15 @@ jobs:
           git config --global user.name "CI"
           git config --global user.email "ci@clanker.zone"
           git config --global init.defaultBranch main
-      - name: Extract version from tag
-        id: version
-        run: |
-          VERSION="${{ github.event.release.tag_name }}"
-          VERSION="${VERSION#v}"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-java@v4
         with:
           distribution: jetbrains
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
       - name: Build and test
-        run: ./gradlew build -PVERSION_NAME=${{ steps.version.outputs.version }}
+        run: ./gradlew build
       - name: Publish to Maven Central
-        run: ./gradlew publishAndReleaseToMavenCentral -PVERSION_NAME=${{ steps.version.outputs.version }}
+        run: ./gradlew publishAndReleaseToMavenCentral
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
